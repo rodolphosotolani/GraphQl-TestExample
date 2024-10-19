@@ -1,0 +1,33 @@
+scalar DateTime
+
+type Query {
+    coffee(id: ID!): Coffee!
+    coffees: [Coffee!]
+    order(id: ID!): Order!
+    orders: [Order!]
+}
+
+type Mutation {
+    createCoffe(name: String!, size: SizeCoffee!): Coffee
+}
+
+type Order {
+    id: ID!
+    user: String!
+    coffee: Coffee!
+    orderedOn: DateTime!
+}
+
+type Coffee {
+    id: ID!
+    name: String!
+    size: SizeCoffee!
+
+}
+
+enum SizeCoffee {
+    SHORT,
+    TAll,
+    GRANDE,
+    VENTI
+}
