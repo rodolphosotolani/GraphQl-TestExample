@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.4'
+    id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -28,15 +28,25 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    //SCALARS - GRAPHQL
+    implementation 'com.graphql-java:graphql-java-extended-scalars:20.0'
+    //DATA-FAKER - GERADOR DADOS
+    implementation 'net.datafaker:datafaker:2.3.0'
+
     compileOnly 'org.projectlombok:lombok'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
     runtimeOnly 'org.postgresql:postgresql'
+
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-webflux'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
