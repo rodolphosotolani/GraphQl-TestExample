@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: SecurityExample
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  graphql:
+    graphiql:
+      enabled: true
+    schema:
+      introspection:
+        enabled: true
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
