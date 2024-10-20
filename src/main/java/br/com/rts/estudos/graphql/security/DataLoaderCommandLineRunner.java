@@ -5,18 +5,20 @@ import br.com.rts.estudos.graphql.security.coffee.CoffeeRepository;
 import br.com.rts.estudos.graphql.security.coffee.SizeCoffeeEnum;
 import br.com.rts.estudos.graphql.security.order.Order;
 import br.com.rts.estudos.graphql.security.order.OrderRepository;
-import br.com.rts.estudos.graphql.security.user.User;
-import br.com.rts.estudos.graphql.security.user.UserRepository;
+import br.com.rts.estudos.graphql.security.user.*;
+import graphql.com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +36,11 @@ public class DataLoaderCommandLineRunner implements CommandLineRunner {
 
     private final UserRepository userRepository;
 
+    private final RoleAuthorityRepository roleAuthorityRepository;
+
     private final Faker faker;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,19 +54,34 @@ public class DataLoaderCommandLineRunner implements CommandLineRunner {
     private List<User> createUsers() {
         var users = new ArrayList<User>();
 
+        var user = this.createUser(RoleEnum.ROLE_USER);
+        var admin = this.createUser(RoleEnum.ROLE_ADMIN);
+
         users.add(User
                 .builder()
-                .name("User")
-                .role("USER")
+                .name("Rodolpho T. Sotolani")
+                .login("user")
+                .password(passwordEncoder.encode("password"))
+                .grantedAuthorities(Collections.singleton(user))
                 .build());
 
         users.add(User
                 .builder()
-                .name("Admin")
-                .role("USER, ADMIN")
+                .name("Cristine de Almeida Pilger")
+                .login("admin")
+                .password(passwordEncoder.encode("password"))
+                .grantedAuthorities(Sets.newHashSet(user, admin))
                 .build());
 
         return userRepository.saveAll(users);
+    }
+
+    private RoleAuthority createUser(RoleEnum roleEnum) {
+        return roleAuthorityRepository
+                .save(RoleAuthority
+                        .builder()
+                        .role(roleEnum)
+                        .build());
     }
 
     private void createOrders(List<Coffee> coffees, List<User> users) {
@@ -94,7 +115,11 @@ public class DataLoaderCommandLineRunner implements CommandLineRunner {
 
             coffees.add(Coffee
                     .builder()
-                    .name(faker.marvelSnap().event())
+                    .name(faker.coffee().name1())
+                    .body(faker.coffee().body())
+                    .country(faker.coffee().country())
+                    .blendName(faker.coffee().blendName())
+                    .intensifier(faker.coffee().intensifier())
                     .size(SizeCoffeeEnum.values()[faker.number().numberBetween(0, SizeCoffeeEnum.values().length)])
                     .build());
         }
