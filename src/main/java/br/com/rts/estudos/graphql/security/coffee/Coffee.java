@@ -19,6 +19,14 @@ public class Coffee {
 
     private String name;
 
+    private String blendName;
+
+    private String body;
+
+    private String country;
+
+    private String intensifier;
+
     @Enumerated(EnumType.STRING)
     private SizeCoffeeEnum size;
 
