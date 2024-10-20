@@ -8,7 +8,7 @@ type Query {
 }
 
 type Mutation {
-    createCoffe(name: String!, size: SizeCoffee!): Coffee
+    createCoffee(name: String!, size: SizeCoffee!): Coffee
 }
 
 type Order {
