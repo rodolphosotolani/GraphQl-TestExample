@@ -14,7 +14,7 @@ public class GraphQlConfig {
     @Bean
     public RuntimeWiringConfigurer runtimeWiringConfigurer() {
         return wiringBuilder -> wiringBuilder
-                .scalar(ExtendedScalars.DateTime);
+                .scalar(ExtendedScalars.Date); //FIXME ALTERAR IMPLEMENTACAO PARA LOCALDATETIME
     }
 
     @Bean

@@ -1,4 +1,4 @@
-scalar DateTime
+scalar Date @specifiedBy(url: "https://tools.ietf.org.html/rfc3339")
 
 type Query {
     coffee(id: ID!): Coffee!
@@ -13,9 +13,14 @@ type Mutation {
 
 type Order {
     id: ID!
-    user: String!
+    user: User!
     coffee: Coffee!
-    orderedOn: DateTime!
+    orderedOn: Date!
+}
+
+type User {
+    id: ID!
+    name: String!
 }
 
 type Coffee {
