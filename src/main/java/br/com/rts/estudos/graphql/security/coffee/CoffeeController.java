@@ -1,12 +1,11 @@
 package br.com.rts.estudos.graphql.security.coffee;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -25,14 +24,12 @@ public class CoffeeController {
         return repository.findById(id);
     }
 
-    @Secured("ROLE_USER")
     @QueryMapping
     public List<Coffee> coffees() {
         log.info("Find all coffees!");
         return repository.findAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @MutationMapping(value = "createCoffee")
     public Coffee createCoffee(@Argument String name, @Argument SizeCoffeeEnum size) {
         return repository
@@ -41,6 +38,28 @@ public class CoffeeController {
                         .size(size)
                         .name(name)
                         .build());
+    }
+
+    @MutationMapping(value = "updateCoffee")
+    public Coffee updateCoffee(@Argument Long id, @Argument String name, @Argument SizeCoffeeEnum size) {
+        Coffee coffee = repository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Coffee doesn't exist"));
+        return repository
+                .save(coffee
+                        .toBuilder()
+                        .name(name)
+                        .size(size)
+                        .build());
+    }
+
+    @MutationMapping(value = "deleteCoffee")
+    public Coffee updateCoffee(@Argument Long id) {
+        Coffee coffee = repository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Coffee doesn't exist"));
+        repository.deleteById(id);
+        return coffee;
     }
 
 }

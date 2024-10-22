@@ -9,6 +9,8 @@ type Query {
 
 type Mutation {
     createCoffee(name: String!, size: SizeCoffee!): Coffee
+    updateCoffee(id: ID, name: String!, size: SizeCoffee!): Coffee
+    deleteCoffee(id: ID): Coffee!
 }
 
 type Order {
